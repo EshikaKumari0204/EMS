@@ -9,6 +9,7 @@ import Leave from "./pages/Leave"
 import Payslips from "./pages/Payslips"
 import Settings from "./pages/Settings"
 import PrintPayslips from "./pages/PrintPayslips"
+import LoginForm from "./Components/LoginForm"
 
 const App = () => {
   return (
@@ -16,7 +17,9 @@ const App = () => {
    <Toaster/>
     <Routes>
       <Route path="/login" element={<LoginLanding></LoginLanding>}></Route>
-      <Route element={<Layout/>}>
+       <Route path="/login/admin" element={<LoginForm role="admin" title="Admin Portal" subtitle="Sign in to manage the employees"></LoginForm>}></Route>
+        <Route path="/login/employee" element={<LoginForm role="employee" title="Employee Portal" subtitle="Sign in to access your account "></LoginForm>}></Route>
+      <Route element={<Layout/>}> 
        <Route path="/dashboard" element={<Dashboard/>}></Route>
          <Route path="/employees" element={<Employees/>}></Route>
            <Route path="/attendance" element={<Attendance/>}></Route>
