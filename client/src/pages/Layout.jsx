@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <div className="flex gap-5">
       <Sidebar ></Sidebar>
-      <main>
+      <main className="w-full">
         <div><Outlet></Outlet></div>
       </main>
     </div>
