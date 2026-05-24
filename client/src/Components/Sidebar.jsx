@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [Username,setUsername]=useState("");
   const {pathname}=useLocation();
   const [Mobileopen,setMobileopen]=useState(false);
-  const role="Employee"|| "Admin"
+  const role="Admin"|| "Employee"
   const logout=()=>{
     window.location.href="/login"
   }
@@ -25,9 +25,9 @@ const Sidebar = () => {
     </div>
     <div className="text-sm ">NAVIGATION</div>
     <div className="flex flex-col gap-4">
-      {navlinks.map((link)=>{
+      {navlinks.map((link,index)=>{
         const isActive=pathname.startsWith(link.href)
-        return (<Link className="flex gap-2 justify-between" to={link.name}>
+        return (<Link className="flex gap-2 justify-between" key={index} to={link.name}>
        <div className="flex gap-2 ">   <link.icon></link.icon>
           <p>{link.name}</p></div>
           {isActive && <ChevronRightIcon/>}
