@@ -1,9 +1,10 @@
 
 import {useState,useEffect,useCallback} from "react"
 import { DEPARTMENTS, dummyEmployeeData } from "../assets/assets";
-import {Plus,Search} from "lucide-react"
+import {Plus,Search,XIcon} from "lucide-react"
 import EmployeeCard from "../Components/EmployeeCard";
 import Loading from "../Components/Loading"
+import FormComp from "../Components/FormComp";
 const Employees = () => {
   const [employees,setEmployees]=useState([]);
   const [loading ,setloading]=useState(false);
@@ -39,7 +40,7 @@ fetchEmployees();
         <p className="bold text-md">Employees</p>
         <p className="bold text-sm">Manage your Team Members</p>
       </div>
-      <div ><button className="flex px-3 py-2 bg-blue-500 text-white border rounded items-center gap-0.5  "><Plus size={18}></Plus> Add Employee</button></div>
+      <div ><button className="flex px-3 py-2 bg-blue-500 text-white border rounded items-center gap-0.5  " onClick={()=>setShowCreateModel(true)}><Plus size={18}></Plus> Add Employee</button></div>
       </div>
       {/* search part  */}
       <div  className="flex  justify-between items-center gap-4 ">
@@ -55,10 +56,26 @@ fetchEmployees();
       {/* employee card */}
       <div>
       {filtered.length===0 ? (<Loading/>): 
-     ( <div className="flex gap-2">{filtered.map((emp,index)=><EmployeeCard emp={emp} key={index}></EmployeeCard>)}</div>)
+     ( <div className="flex gap-2">{filtered.map((emp,index)=><EmployeeCard emp={emp} key={index} setonEdit={setonEdit} ondelete={ondelete}></EmployeeCard>)}</div>)
       }
       </div>
       {/* show the form for creating the employee and editing employees */}
+      {showCreateModel &&
+      (<div onClick={()=>setShowCreateModel(false)} className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-center justify-center p-4 ">
+       <div onClick={(e)=>e.stopPropagation()} className="relative bg-white rounded-2xl shadow-2xl w-full  max-w-2xl my-8 animate-fade-in p-4"> <div className="flex  justify-between"><div><h2>Add New Employee</h2> <p>Create an employee account and profile</p>
+        </div>
+        <button onClick={()=>setShowCreateModel(false)}><XIcon></XIcon></button></div>
+        <FormComp/></div>
+      </div>)
+       }
+         {onedit &&
+      (<div onClick={()=>setonEdit(false)} className="fixed bg-black/40 backdrop-blur-sm inset-0 z-50 flex items-center justify-center p-4 ">
+       <div onClick={(e)=>e.stopPropagation()} className="relative bg-white rounded-2xl shadow-2xl w-full  max-w-2xl my-8 animate-fade-in p-4"> <div className="flex  justify-between"><div><h2>Edit Employee</h2> <p> Update Employee Details</p>
+        </div>
+        <button onClick={()=>setonEdit(false)}><XIcon></XIcon></button></div>
+        <FormComp/></div>
+      </div>)
+       }
       
     </div>
   )
