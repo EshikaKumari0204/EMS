@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [Username,setUsername]=useState("");
   const {pathname}=useLocation();
   const [Mobileopen,setMobileopen]=useState(false);
-  const role="Admin"|| "Employee"
+  const role="Employee"|| "Admin"
   const logout=()=>{
     window.location.href="/login"
   }
