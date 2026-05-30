@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom"
 import {CalendarIcon,FileTextIcon,DollarSignIcon} from "lucide-react"
 const Employeedb = ({data}) => {
-  
+ 
   const cards=[{icon:CalendarIcon,value:data.currentMonthAttendance,title:"Days Present",subtitle:"This Month"},{icon:FileTextIcon,value:data.pendingLeaves,title:"Pending Leaves ",subtitle:"Awaiting Approval"},{icon:DollarSignIcon,value:data.latestPayslip?`$${data.latestPayslip.netSalary?.toLocaleString()}`:"N/A",title:"Latest payslip",subtitle:"Most Recent Payout"}]
   return (
     <div className="px-2">

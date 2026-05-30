@@ -28,7 +28,8 @@ const App = () => {
                  <Route path="/settings" element={<Settings/>}></Route>        
       </Route>
         <Route path="/print/payslips/:id" element={<PrintPayslips/>}></Route>
-           <Route path="/*" element={<Navigate to="/dashboard" replace/>}></Route>
+        {/*  It automatically redirects users to the /dashboard page if they type in or land on a URL that does not match any of your defined routes */}
+           <Route path="*" element={<Navigate to="/dashboard" replace/>}></Route>
     </Routes>
    </>
   )

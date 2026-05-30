@@ -14,8 +14,7 @@ useEffect(()=>{
  },1000)
 },[])
 if(loading) return <Loading/>
-if(!data) return <p className="text-center text-black text-center text-3xl p-10 ">Data about to load ...</p>
-  
+if(!data) return <p className="text-center text-slate-500 py-12  text-center text-3xl p-10 ">Data about to load ...</p>
    if (data.role=="ADMIN") return <Admindb data={data}/>
   else return <Employeedb data={data} />
 }
