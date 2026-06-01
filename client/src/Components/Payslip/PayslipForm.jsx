@@ -1,7 +1,8 @@
 import {useState,useEffect} from 'react'
-import {Plus,X} from "lucide-react"
+import {Plus,X,Loader2} from "lucide-react"
 const PayslipForm = ({employees,onSuccess}) => {
   const [isOpen,setIsOpen]=useState(false)
+  const [loading,setloading]=useState(false)
   if(!isOpen){
     return <button onClick={()=>setIsOpen(true)}className="flex gap-0.5 px-3 py-2 bg-blue-500 text-white border rounded items-center"><Plus/>Generate Payslip</button>
   }
@@ -32,7 +33,7 @@ const PayslipForm = ({employees,onSuccess}) => {
       <input type="number" placeholder="0" defaultValue="0"/></div>
       <div><label htmlFor="">Deductions</label>
       <input type="number" placeholder="0" defaultValue="0"/></div></div>
-      <div class="flex justify-end"><button className="px-2 ">Cancel</button> <button className="px-2 py-2  bg-blue-500 text-white border rounded ">Generate</button></div>
+      <div class="flex justify-end"><button className="px-2 ">Cancel</button> <button disabled={loading} className="px-2 py-2  bg-blue-500 text-white border rounded ">{loading && <Loader2/>}Generate</button></div>
       </div>
     </div>
   )
