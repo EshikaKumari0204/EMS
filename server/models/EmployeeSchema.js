@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { DEPARTMENTS } from "../constants/dept"
+import { DEPARTMENTS } from "../constants/dept.js"
 const empSchema=new mongoose.Schema({
   userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",unique:true,required:true},
   firstName:{type:String,required:true},
