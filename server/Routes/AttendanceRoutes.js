@@ -5,5 +5,4 @@ import { protect } from "../middlewares/protect.js"
 const AttendanceRouter=express.Router()
 AttendanceRouter.get("/",profile,getAttendance)
 AttendanceRouter.post("/",protect,clockInOut)
-
 export default AttendanceRouter
