@@ -1,5 +1,6 @@
 import { User } from "../models/UserSchema.js";
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 export const login=async(req,res)=>{
   try {
   const {email,password,role_type}=req.body;
@@ -27,14 +28,11 @@ export const login=async(req,res)=>{
   catch (error) {
     console.log("error in login",error)
       return res.status(500).json({error:"Login failed "})
-    
   }
-
 }
 export const session=async(req,res)=>{
-  const session=req.session;   //extract the session object from an incoming HTTP request (req.session)
+  const session=req.session;   
   return res.json({user:session})}
-
 export const changePassword=async(req,res)=>{
   try {
     const session=req.session;
@@ -46,14 +44,12 @@ export const changePassword=async(req,res)=>{
    if(!user){
     return res.status(401).json({error:"User not found "})
   }
-  
   const valid=await bcrypt.compare(currentPassword,user.password)
    if(!valid){
     return res.status(401).json({error:"Current password is wrong"})
   }
   const hashed=await bcrypt.hash(newPassword,10)
   const updatedUser=await User.findByIdAndUpdate(session.userId,{password:hashed})
-
     return res.json({success:true})
   } catch (error) {
     console.log("error in login",error)

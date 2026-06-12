@@ -55,7 +55,7 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
               {isAdmin && (
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <button
+                    <button  disabled={!!processing}
                       onClick={() => statusUpdate(
                         leave.id || leave._id, "APPROVED"
                       )}
@@ -72,7 +72,7 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
                         leave.id || leave._id, "REJECTED"
                       )}
                       className="p-1 rounded hover:bg-red-100 
-                        text-red-600 transition-colors"
+                        text-red-600 transition-colors" disabled={!!processing}
                     >
                       {processing === (leave.id || leave._id)
                         ? <Loader2 size={20} className="animate-spin"/>

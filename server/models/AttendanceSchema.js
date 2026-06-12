@@ -8,4 +8,4 @@ const AttendanceSchema=new mongoose.Schema({
   workingHours:{type:Date,default:null},
   dayType:{type:String,enum:["Full Day","Three Quarter Day","Half Day","Short Day","null"],default:null}
 },{timestamps:true})
-export const Attendance=mongoose.models.Attendance||mongoose.model(" Attendance",AttendanceSchema)
+export const Attendance=mongoose.models.Attendance||mongoose.model("Attendance",AttendanceSchema)

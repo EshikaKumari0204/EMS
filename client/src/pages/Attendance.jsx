@@ -1,29 +1,64 @@
-import {dummyAttendanceData} from "../assets/assets"
-import {useState,useEffect,useCallback} from "react"
-import Loading from "../Components/Loading"
-const Attendance = () => {
-  const [history,sethistory]=useState([])
-    const [loading,setloading]=useState(false)
-      const [isdeleted,setisdeleted]=useState(false)
-      const fetchdata=useCallback(async()=>{
-        setloading(true)
-         sethistory(dummyAttendanceData)
-         setTimeout(()=>{
-setloading(false)
-         },1000)
-      },[])
-      const today=new Date();
-      today.setHours(0,0,0,0)
-      const todayrecord=history.find((r)=>new Date(r.date).toDateString===today.toDateString())
-      if(loading) return <Loading/>
-  return (
-    <div>
-      <div>
-        <p>Attendance</p>
-        <p>Track your work hours and daily check-ins</p>
-      </div>
-    </div>
-  )
-}
 
-export default Attendance
+
+import { dummyAttendanceData } from "../assets/assets";
+import { useState, useEffect, useCallback } from "react";
+import Loading from "../Components/Loading";
+import Checkin from "../Components/attendance/Checkin";
+import Attendancestats from "../Components/attendance/Attendancestats";
+import AttendanceHistory from "../Components/attendance/AttendanceHistory";
+import { AlertCircleIcon } from "lucide-react";
+
+const Attendance = () => {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    setHistory(dummyAttendanceData);
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (loading) return <Loading />;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayRecord = history.find(
+    (r) => new Date(r.date).toDateString() === today.toDateString()
+  );
+
+  return (
+    <div className="px-4 sm:px-8 py-6 max-w-5xl w-full flex flex-col gap-6">
+
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-700">
+          Attendance
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Daily check-ins and work hours
+        </p>
+      </div>
+
+      {/* Deleted employee banner */}
+      {isDeleted ? (
+        <div className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+          <AlertCircleIcon size={18} className="shrink-0" />
+          <p>
+            Unable to check in or out — this employee record has been deleted.
+          </p>
+        </div>
+      ) : (
+        <Checkin todayRecord={todayRecord} onAction={fetchData} />
+      )}
+
+      <Attendancestats history={history} />
+      <AttendanceHistory history={history} />
+    </div>
+  );
+};
+
+export default Attendance;

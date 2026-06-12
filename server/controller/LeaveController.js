@@ -1,5 +1,5 @@
-import { Leave } from "../models/LeaveSchema";
-import { Employee } from "../models/EmployeeSchema";
+import { Leave } from "../models/LeaveSchema.js";
+import { Employee } from "../models/EmployeeSchema.js";
 
 export const createleave=async(req,res)=>{
   try {
@@ -9,16 +9,16 @@ export const createleave=async(req,res)=>{
        return res.status(404).json({error:"Employee not found"})
       }
        if(emp.isDeleted){
-       return res.status(403).json({error:"Employee is deleted so profile cant be updated"})
+       return res.status(403).json({error:"Employee is deleted so leave cant be created"})
       }
+      const {type,startDate,endDate,reason}=req.body;
       if(!type || !startDate || !endDate || !reason){
-      
-        
+      return res.status(400).json({error:"All fields are required "})
       }
       const today=new Date();
       today.setHours(0,0,0,0);
       if(new Date(startDate)<=today || new  Date(endDate)<= today){  return res.status(400).json({error:"Leave Date must be in future "})}
-      const leave=await Leave.create({employeeId:employee._id,type,startDate:new Date(startDate),endDate:new Date(endDate),reason,status:"PENDING"})
+      const leave=await Leave.create({employeeId:emp._id,type,startDate:new Date(startDate),endDate:new Date(endDate),reason,status:"PENDING"})
       return res.json({success:true,data:leave})
     
   } catch (error) {
@@ -47,7 +47,7 @@ export const getLeaves=async(req,res)=>{
        return res.status(404).json({error:"Employee not found"})
       }
       const leaves = await Leave.find({employeeId:employee._id}).sort({createdAt:-1})
-      return res.json({data:leaves},employee:{...employee,-d:employee._id.toString()})
+      return res.json({data:leaves,employee:{...employee,employeeId:employee._id.toString()}})
     }
     
   } catch (error) {
@@ -63,7 +63,6 @@ export const updateLeaveStatus=async(req,res)=>{
     }
     const leave=await Leave.findByIdAndUpdate(req.params.id,{status},{returnDocument:"after"})
     return res.json({success:true,data:leave})
-    
   } catch (error) {
     return res.status(500).json({error:"Failed"})
   }

@@ -25,6 +25,7 @@ async function registerAdmin(){
     process.exit(0);
   } catch (error) {
     console.log("error while registering the admin",error)
+     process.exit(1)
   }
 }
 registerAdmin()

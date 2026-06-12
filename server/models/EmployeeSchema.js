@@ -11,6 +11,8 @@ const empSchema=new mongoose.Schema({
   allowances:{type:Number,required:true},
    deductions:{type:Number,required:true},
    employmentStatus:{type:String,enum:["ACTIVE","INACTIVE"],default:"ACTIVE"},
-   department:{type:String,enum:DEPARTMENTS}
+   department:{type:String,enum:DEPARTMENTS},
+   isDeleted:{type:Boolean,default:false}
+
 },{timestamps:true})
-export const Employee=mongoose.models.Employee||mongoose.model(" Employee",empSchema)
+export const Employee=mongoose.models.Employee||mongoose.model("Employee",empSchema)
