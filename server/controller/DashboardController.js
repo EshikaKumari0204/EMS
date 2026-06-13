@@ -3,14 +3,14 @@ import { Attendance } from "../models/AttendanceSchema.js";
 import { Employee } from "../models/EmployeeSchema.js";
 import { Leave } from "../models/LeaveSchema.js";
 import { Payslip } from "../models/PayslipSchema.js";
-export getDashboard=async(req,res)=>{
+export const getDashboard=async(req,res)=>{
   try {
   const session=req.session;
   if(session.role==="ADMIN"){
     const [totalEmployees,todayAttendance,pendingLeaves]=await Promise.all(
       [
         Employee.countDocuments({isDeleted:{$ne:true}}),
-        Attendance.countDocuments({date:{$gte:new Date(new Date().setHours(0,0,0,0)),$lt:new Date(new Date.setHours(24,0,0,0))}}),
+        Attendance.countDocuments({date:{$gte:new Date(new Date().setHours(0,0,0,0)),$lt:new Date(new Date().setHours(24,0,0,0))}}),
         Leave.countDocuments({status:"PENDING"})
       ]
     )
@@ -20,7 +20,7 @@ export getDashboard=async(req,res)=>{
     const empid=session.userId;
     const emp=await Employee.findOne({userId:empid}).lean();
     if(!emp){
-      return res.status(400).json(error:"Employee not found")
+      return res.status(400).json({error:"Employee not found"})
     }
     const today=new Date();
     const [currentMonthAttendance,pendingLeaves,latestPayslip]=await Promise.all([

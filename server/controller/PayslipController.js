@@ -1,4 +1,4 @@
-import { Payslip } from "../models/PayslipSchema";
+import { Payslip } from "../models/PayslipSchema.js";
 export const createPayslip=async(req,res)=>{
   try {
     const {employeeId,month,year,basicSalary,allowances,deductions}=req.body;
@@ -19,8 +19,8 @@ export const getPayslipById=async(req,res)=>{
   try {
     const payslip=await Payslip.findById(req.params.id).populate("employeeId").lean();
     if(!payslip)  return res.status(404).json({error:"not found"})
-      const result={...payslip,id:payslip._id,toString().employee:payslip.employeeId}
-    
+      const result={...payslip,id:payslip._id.toString(),employee:payslip.employeeId}
+   return res.json({success:true, data:result})
   } catch (error) {
     console.log("error get payslip by id ",error)
     return res.status(500).json({error:"Failed"})
@@ -36,8 +36,12 @@ export const getpayslip=async(req,res)=>{
         const obj=p.toObject();
         return {...obj,id:obj._id.toString()}
       })
+      return res.json({data})
     }
-    return res.json({data})
+    
+    else {
+  return res.status(403).json({error:"Access denied"})
+}
     
   } catch (error) {
     console.log("error get payslip  ",error)

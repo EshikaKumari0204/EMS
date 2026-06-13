@@ -1,10 +1,10 @@
 import { Leave } from "../models/LeaveSchema.js";
 import { Employee } from "../models/EmployeeSchema.js";
-
+import { inngest } from "../inngest/index.js";
 export const createleave=async(req,res)=>{
   try {
     const session=req.session;
-      const emp=Employee.findOne({userId:session.userId})
+      const emp=await Employee.findOne({userId:session.userId})
       if(!emp){
        return res.status(404).json({error:"Employee not found"})
       }
@@ -19,11 +19,12 @@ export const createleave=async(req,res)=>{
       today.setHours(0,0,0,0);
       if(new Date(startDate)<=today || new  Date(endDate)<= today){  return res.status(400).json({error:"Leave Date must be in future "})}
       const leave=await Leave.create({employeeId:emp._id,type,startDate:new Date(startDate),endDate:new Date(endDate),reason,status:"PENDING"})
+      await inngest.send({name:"leave/pending",data:{leaveId:leave._id}})
       return res.json({success:true,data:leave})
     
   } catch (error) {
     console.log("error in creating leave ")
-    res.status.json({error:"error in  creating leave"})
+    res.status(500).json({error:"error in  creating leave"})
     
   }
 }
@@ -42,12 +43,12 @@ export const getLeaves=async(req,res)=>{
       return res.json({data})
     }
     else{
-      const employee=await Employee.findOne({userId:session.userId}).lean();
+      const emp=await Employee.findOne({userId:session.userId}).lean();
       if(!emp){
        return res.status(404).json({error:"Employee not found"})
       }
-      const leaves = await Leave.find({employeeId:employee._id}).sort({createdAt:-1})
-      return res.json({data:leaves,employee:{...employee,employeeId:employee._id.toString()}})
+      const leaves = await Leave.find({employeeId:emp._id}).sort({createdAt:-1})
+      return res.json({data:leaves,employee:{...emp,employeeId:emp._id.toString()}})
     }
     
   } catch (error) {
@@ -61,7 +62,7 @@ export const updateLeaveStatus=async(req,res)=>{
     if(!["APPROVED","REJECTED","PENDING"].includes(status)){
       return res.status(400).json({error:"Invalid status"})
     }
-    const leave=await Leave.findByIdAndUpdate(req.params.id,{status},{returnDocument:"after"})
+    const leave=await Leave.findByIdAndUpdate(req.params.id, {status}, {new:true})
     return res.json({success:true,data:leave})
   } catch (error) {
     return res.status(500).json({error:"Failed"})

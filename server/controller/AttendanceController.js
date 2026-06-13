@@ -1,5 +1,6 @@
-import { Attendance } from "../models/AttendanceSchema";
-
+import { inngest } from "../inngest/index.js";
+import { Attendance } from "../models/AttendanceSchema.js";
+import { Employee } from "../models/EmployeeSchema.js";
 export const clockInOut=async(req,res)=>{
   try {
     const session=req.session;
@@ -16,8 +17,9 @@ export const clockInOut=async(req,res)=>{
       const existing = await Attendance.findOne({employeeId:emp._id,date:today})
       const now=new Date();
       if(!existing){
-        const islate=now.getHours>=9 && now.getMinutes()>0;
+        const islate=now.getHours()>=9 && now.getMinutes()>0;
         const attendance=await Attendance.create({employeeId:emp._id,date:today,checkIn:now,status:islate?"LATE":"PRESENT"})
+        await inngest.send({name:"employee/check-out",data:{employeeId:emp._id,attendanceId:attendance._id}})
         return res.json({data:attendance,type:"CHECK_IN",success:true})
       }
       else if(!existing.checkOut){
@@ -25,11 +27,11 @@ export const clockInOut=async(req,res)=>{
         const diffMs=now.getTime()-checkInTime
         const diffHr=diffMs/(1000*60*60)
         existing.checkOut=now
-        const workingHours=parseFloat(diffHours.toFixed(2))
+        const workingHours=parseFloat(diffHr.toFixed(2))
         let  dayType="Half Day"
         if(workingHours>=8) dayType="Full Day"
-         else if(workingHours>=8) dayType="Three Quarters Day"
-          else if(workingHours>=4) dayType="Half  Day"
+         else if(workingHours>=6) dayType="Three Quarters Day"
+          else if(workingHours>=4) dayType="Half Day"
            else dayType="Short Day"
            existing.workingHours=workingHours;
            existing.dayType=dayType
@@ -46,7 +48,7 @@ export const clockInOut=async(req,res)=>{
     
   }
 }
-export const getAttendance==async(req,res)=>{
+export const getAttendance=async(req,res)=>{
   try {
      const session=req.session;
       const emp=await Employee.findOne({userId:session.userId})
@@ -54,8 +56,8 @@ export const getAttendance==async(req,res)=>{
        return res.status(404).json({error:"Employee not found"})
       }
       const limit=parseInt(req.query.limit||30)
-      const history=await Attendance.find({employeeId:employee._id}).sort({date:-1}.limit(limit))
-    return res.json({data:history,employee:{isDeleted:employee.isDeleted}})
+      const history=await Attendance.find({employeeId:emp._id}).sort({date:-1}).limit(limit)
+    return res.json({data:history,employee:{isDeleted:emp.isDeleted}})
   } catch (error) {
     console.log(error,"get attendance")
     return res.status(500).json({error:"Failed to fetch attendance "})

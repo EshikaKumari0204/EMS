@@ -1,4 +1,4 @@
-import { User } from "../models/UserSchema.js";
+
 import { Employee } from "../models/EmployeeSchema.js";
 export const getProfile=async(req,res)=>{
   try {

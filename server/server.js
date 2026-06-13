@@ -2,6 +2,8 @@ import express from "express"
 import cors from "cors"
 import multer from "multer"
 import "dotenv/config"
+import { serve } from "inngest/express";
+import { inngest, functions } from "./inngest/index.js"
 import { connectDb } from "./config/db.js"
 import EmployeeRouter from "./Routes/EmployeeRoutes.js"
 import AuthRouter from "./Routes/AuthRoutes.js"
@@ -18,6 +20,7 @@ app.use("/api/employees",EmployeeRouter)
 app.use("/api/auth",AuthRouter)
 app.use("/api/profile",ProfileRouter)
 app.use("/api/leaves",LeaveRouter)
+app.use("/api/inngest", serve({ client: inngest, functions }));
  await connectDb()
 app.listen(port,()=>{
   console.log(`server is listening on port num ${port}`)
