@@ -25,6 +25,7 @@ const ChangePass = ({ open, onClose }) => {
    }
    finally{
     setLoading(false)
+    onClose()
    }
   };
 

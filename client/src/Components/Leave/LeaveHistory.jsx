@@ -83,7 +83,7 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
               </td>
               {isAdmin && (
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
+               {leave.status==="PENDING" &&  (<div className="flex items-center gap-2">
                     <button  disabled={!!processing}
                       onClick={() => statusUpdate(
                         leave._id || leave.id, "APPROVED"
@@ -108,7 +108,7 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
                         : <Trash size={20}/>
                       }
                     </button>
-                  </div>
+                  </div>)}
                 </td>
               )}
             </tr>

@@ -36,7 +36,9 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
 
   }
   finally{
+
     setLoading(false)
+    onCancel()
   }
 
   }

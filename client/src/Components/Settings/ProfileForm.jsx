@@ -5,6 +5,7 @@ import { useState } from "react";
 import {toast} from "react-hot-toast"
 import api from "../../api/axios";
 const inputClass = "w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition";
+const disabledInputClass = "w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-slate-50 text-slate-400 placeholder-slate-300 cursor-not-allowed";
 const labelClass = "text-sm font-medium text-slate-600";
 
 const ProfileForm = ({ initialdata, onSuccess }) => {
@@ -58,7 +59,7 @@ const ProfileForm = ({ initialdata, onSuccess }) => {
             type="text"
             placeholder="Alex Doe"
             defaultValue={initialdata?.firstName}
-            className={inputClass} disabled
+            className={disabledInputClass} disabled
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -67,7 +68,7 @@ const ProfileForm = ({ initialdata, onSuccess }) => {
             type="email"
             placeholder="abc@gmail.com"
             defaultValue={initialdata?.email}
-            className={inputClass} disabled
+            className={disabledInputClass} disabled
           />
         </div>
       </div>
@@ -79,7 +80,7 @@ const ProfileForm = ({ initialdata, onSuccess }) => {
           type="text"
           defaultValue={initialdata?.position}
           placeholder="e.g. Software Engineer"
-          className={inputClass} disabled
+          className={disabledInputClass} disabled
         />
       </div>
 
