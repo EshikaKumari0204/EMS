@@ -28,7 +28,10 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/attendance",AttendanceRouter)
 app.use("/api/payslips",PayslipRouter)
 
- await connectDb()
+connectDb().catch((err) => {
+  console.error("DB connection failed:", err.message)
+})
 app.listen(port,()=>{
   console.log(`server is listening on port num ${port}`)
 })
+export default app
