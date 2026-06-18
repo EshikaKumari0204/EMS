@@ -2,20 +2,24 @@
 
 import { Loader2Icon, LogInIcon, LogOutIcon } from "lucide-react";
 import { useState } from "react";
-
+import api from "../../api/axios";
+import {toast} from "react-hot-toast"
 const Checkin = ({ todayrecord, onAction }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleAttendance = () => {
+  const handleAttendance =async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onAction();
-    }, 1000);
+    try {
+      await api.post("/attendance")
+      onAction()
+    } catch (error) {
+         toast.error(error.response?.data?.error||error.message)
+    }
+    setLoading(false)
   };
 
   // Work day completed state
-  if (todayrecord?.checkout)
+  if (todayrecord?.checkOut)
     return (
       <div className="flex flex-col items-center justify-center p-6 sm:p-8 bg-slate-50 border border-slate-200 rounded-2xl text-center">
         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
@@ -30,7 +34,8 @@ const Checkin = ({ todayrecord, onAction }) => {
       </div>
     );
 
-  const isCheckedIn = !!todayrecord?.isCheckedIn;
+  const isCheckedIn = !!todayrecord?.checkIn;
+  
 
   return (
     <div className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6">
@@ -57,7 +62,7 @@ const Checkin = ({ todayrecord, onAction }) => {
         {/* Text */}
         <div className="flex flex-col items-start">
           <span className="text-sm font-semibold leading-tight">
-            {loading ? "Processing..." : isCheckedIn ? "Clock Out" : "Clock In"}
+            {loading ? "Processing..." : isCheckedIn ? "Check Out" : "Check In"}
           </span>
           <span className="text-xs opacity-75 mt-0.5">
             {isCheckedIn ? "End your shift" : "Start your work day"}

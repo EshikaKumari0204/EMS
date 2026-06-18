@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { Download } from "lucide-react";
 
 const PayslipList = ({ isAdmin, payslips }) => {
+  console.log(payslips[0])
   return (
     <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
 
@@ -56,17 +57,17 @@ const PayslipList = ({ isAdmin, payslips }) => {
                 >
                   {isAdmin && (
                     <td className="px-5 py-3.5 text-slate-700 font-medium whitespace-nowrap">
-                      {slip.employee.firstName} {slip.employee.lastName}
+                      {slip.employeeId?.firstName} {slip.employeeId?.lastName}
                     </td>
                   )}
                   <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">
-                    {format(new Date(slip.year, slip.month - 1), "MMMM yyyy")}
+                    {format(new Date(slip?.year, slip?.month - 1), "MMMM yyyy")}
                   </td>
                   <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">
-                    ${slip.basicSalary.toLocaleString()}
+                    ${slip?.basicSalary.toLocaleString()}
                   </td>
                   <td className="px-5 py-3.5 text-slate-700 font-medium whitespace-nowrap">
-                    ${slip.netSalary.toLocaleString()}
+                    ${slip?.netSalary.toLocaleString()}
                   </td>
                   <td className="px-5 py-3.5 whitespace-nowrap text-right">
                     <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors duration-150 ml-auto" onClick={()=>window.open(`/print/payslips/${slip.id}`)}>

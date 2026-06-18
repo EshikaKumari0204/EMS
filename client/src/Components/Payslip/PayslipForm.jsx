@@ -1,7 +1,8 @@
 
 import { useState } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
-
+import api from "../../api/axios";
+import {toast} from "react-hot-toast"
 const inputClass = "w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition";
 const labelClass = "text-sm font-medium text-slate-600";
 
@@ -9,14 +10,19 @@ const PayslipForm = ({ employees, onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsOpen(false);
-      onSuccess?.();
-    }, 1000);
+    const formdata=new FormData(e.currentTarget)
+    const data=Object.fromEntries(formdata.entries())
+    try {
+      await api.post("/payslips",data)
+      setIsOpen(false)
+      onSuccess()
+    } catch (error) {
+        toast.error(error.response?.data?.error||error.message)
+    }
+    setLoading(false)
   };
 
   if (!isOpen) {
@@ -59,7 +65,7 @@ const PayslipForm = ({ employees, onSuccess }) => {
           {/* Employee */}
           <div className="flex flex-col gap-1.5">
             <label className={labelClass}>Employee</label>
-            <select name="employee" required className={inputClass}>
+            <select name="employeeId" required className={inputClass}>
               <option value="">Select an employee</option>
               {employees.map((emp, index) => (
                 <option key={index} value={emp.id}>

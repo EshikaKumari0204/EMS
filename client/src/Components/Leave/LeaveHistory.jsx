@@ -1,11 +1,38 @@
 import { format } from "date-fns";
 import {useState} from "react"
 import {Loader2,Check,Trash} from "lucide-react"
+import api from "../../api/axios";
+ import  {toast} from "react-hot-toast"
 const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
   const [processing,setprocessing]=useState("")
-  const statusUpdate=(id,status)=>{
+  const statusUpdate=async(id,status)=>{
     setprocessing(id)
+    try {
+      console.log(id,status)
+      console.log("leaves called api")
+      await api.patch(`/leaves/${id}`,{status})
+      onUpdate()
+      
+    } catch (error) {
+     
+ toast.error(error.response?.data?.error||error.message)
+    }
+    finally{
+      setprocessing("")
+    }
   }
+ 
+   
+  
+   if (!leaves || leaves.length === 0) {
+    return (
+      <div className="mt-6 flex flex-col items-center justify-center py-16 text-gray-400">
+        <p className="text-base font-medium">No records available</p>
+        
+      </div>
+    )
+  }
+  else 
   return (
       <div className="mt-6 overflow-x-auto">
       <table className="w-full text-sm text-left border-collapse">
@@ -25,7 +52,9 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
         </thead>
 
         <tbody>
+         
           {leaves.map((leave, index) => (
+            
             <tr
               key={leave._id || index}
               className="border-b hover:bg-gray-50 transition-colors"
@@ -57,24 +86,24 @@ const LeaveHistory = ({isAdmin,leaves,onUpdate}) => {
                   <div className="flex items-center gap-2">
                     <button  disabled={!!processing}
                       onClick={() => statusUpdate(
-                        leave.id || leave._id, "APPROVED"
+                        leave._id || leave.id, "APPROVED"
                       )}
                       className="p-1 rounded hover:bg-green-100 
                         text-green-600 transition-colors"
                     >
-                      {processing === (leave.id || leave._id)
+                      {processing === (leave._id || leave.id)
                         ? <Loader2 size={20} className="animate-spin"/>
                         : <Check size={20}/>
                       }
                     </button>
                     <button
                       onClick={() => statusUpdate(
-                        leave.id || leave._id, "REJECTED"
+                        leave._id || leave.id, "REJECTED"
                       )}
                       className="p-1 rounded hover:bg-red-100 
                         text-red-600 transition-colors" disabled={!!processing}
                     >
-                      {processing === (leave.id || leave._id)
+                      {processing === (leave._id || leave.id)
                         ? <Loader2 size={20} className="animate-spin"/>
                         : <Trash size={20}/>
                       }

@@ -4,6 +4,7 @@ import { Plus, Search, XIcon } from "lucide-react";
 import EmployeeCard from "../Components/EmployeeCard";
 import Loading from "../Components/Loading";
 import FormComp from "../Components/FormComp";
+import api from "../api/axios";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -14,13 +15,18 @@ const Employees = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const fetchEmployees = useCallback(async () => {
-    setLoading(true);
-    setEmployees(
-      dummyEmployeeData.filter((emp) =>
-        selectDept ? emp.department === selectDept : true
-      )
-    );
-    setTimeout(() => setLoading(false), 1000);
+   try {
+    const url=selectDept?`/employees?department=${selectDept}`: "/employees" ;
+    const res=await api.get(url)
+   
+    setEmployees(res.data)
+    
+   } catch (error) {
+    console.log("fail to fetch employees ",error.message)
+   }
+   finally{
+    setLoading(false)
+   }
   }, [selectDept]);
 
   useEffect(() => {
@@ -94,7 +100,7 @@ const Employees = () => {
             <EmployeeCard
               emp={emp}
               key={emp.id}
-              setonEdit={() => setOnEdit(true)}
+              setonEdit={() => setOnEdit(emp)}
               ondelete={fetchEmployees}
             />
           ))}
@@ -124,7 +130,7 @@ const Employees = () => {
               </button>
             </div>
             <div className="px-6 py-5">
-              <FormComp initialData={onEdit} onSuccess={()=>{setShowCreateModal(true);fetchEmployees();}} onCancel={()=>setShowCreateModal(false)}/>
+              <FormComp  onSuccess={()=>{setShowCreateModal(true);fetchEmployees();}} onCancel={()=>setShowCreateModal(false)}/>
             </div>
           </div>
         </div>
@@ -153,7 +159,7 @@ const Employees = () => {
               </button>
             </div>
             <div className="px-6 py-5">
-              <FormComp initialData={onEdit} onSuccess={()=>{setShowCreateModal(true);fetchEmployees();}} onCancel={()=>setShowCreateModal(false)}/>
+              <FormComp initialData={onEdit} onSuccess={() => { setOnEdit(null); fetchEmployees(); }} onCancel={() => setOnEdit(null)} />
             </div>
           </div>
         </div>

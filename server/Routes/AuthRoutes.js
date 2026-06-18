@@ -4,5 +4,5 @@ import { protect } from "../middlewares/protect.js"
 const AuthRouter=express.Router()
 AuthRouter.post("/login",login)
 AuthRouter.get("/session",protect,session)
-AuthRouter.get("/change-password",protect,changePassword)
+AuthRouter.post("/change-password",protect,changePassword)
 export default AuthRouter

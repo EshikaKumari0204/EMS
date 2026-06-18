@@ -33,6 +33,7 @@ export const login=async(req,res)=>{
 export const session=async(req,res)=>{
   const session=req.session;   
   return res.json({user:session})}
+  
 export const changePassword=async(req,res)=>{
   try {
     const session=req.session;

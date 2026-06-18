@@ -5,21 +5,23 @@ import { dummyPayslipData } from "../assets/assets";
 import Loading from "../Components/Loading";
 import { format } from "date-fns";
 import { PrinterIcon, BuildingIcon } from "lucide-react";
+import api from "../api/axios";
 
 const PrintPayslips = () => {
   const [payslip, setPayslip] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+ 
 
   const getPayslip = async () => {
-    setPayslip(dummyPayslipData.find((data) => data._id === id));
+    await api.get(`/payslips/${id}`).then((res)=>setPayslip(res.data.data)).catch(console.error).finally(()=>setLoading(false))
   };
 
   useEffect(() => {
     getPayslip();
-    setTimeout(() => setLoading(false), 1000);
+   
   }, [id]);
-
+ console.log(payslip)
   if (loading) return <Loading />;
   if (!payslip)
     return (

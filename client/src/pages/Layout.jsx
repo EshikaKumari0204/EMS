@@ -1,7 +1,12 @@
-
-import {Outlet} from "react-router-dom"
+import {useContext} from "react"
+import { AuthContext } from "../context/Authcontext"
+import {Outlet,Navigate} from "react-router-dom"
 import Sidebar from "../Components/Sidebar"
+import Loading from "../Components/Loading"
 const Layout = () => {
+  const {loading,user}=useContext(AuthContext)
+  if(loading) return <Loading/>
+   if(!user) return <Navigate to="/login"/>
   return (
     <div className="flex h-screen ">
      <div> <Sidebar ></Sidebar></div>

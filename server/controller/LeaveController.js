@@ -52,6 +52,7 @@ export const getLeaves=async(req,res)=>{
     }
     
   } catch (error) {
+    console.log("error in get leaves ",error.message)
     return res.status(500).json({error:"failed"})
     
   }
@@ -62,9 +63,14 @@ export const updateLeaveStatus=async(req,res)=>{
     if(!["APPROVED","REJECTED","PENDING"].includes(status)){
       return res.status(400).json({error:"Invalid status"})
     }
-    const leave=await Leave.findByIdAndUpdate(req.params.id, {status}, {new:true})
+   const leave = await Leave.findByIdAndUpdate(
+  req.params.id,
+  { status },
+  { returnDocument: 'after' }
+)
     return res.json({success:true,data:leave})
   } catch (error) {
+    console.log("error in update leaves ",error.message)
     return res.status(500).json({error:"Failed"})
   }
 }

@@ -1,21 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { dummyProfileData } from "../assets/assets";
 import {
   MenuIcon, UserIcon, XIcon, LayoutGridIcon, SettingsIcon,
-  FileTextIcon, DollarSignIcon, CalendarIcon, ChevronRightIcon, LogOutIcon,
+  FileTextIcon, DollarSignIcon, CalendarIcon, ChevronRightIcon, LogOutIcon,Loader2
 } from "lucide-react";
+import { AuthContext } from "../context/Authcontext";
+import api from "../api/axios";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
   const [username, setUsername] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const role = "EMPLOYEE"  || "EMPLOYEE";
+  const {user,loading,logout}=useContext(AuthContext)
 
-  const logout = () => {
+  const logouthandle = () => {
+    logout()
     window.location.href = "/login";
   };
-
+  useEffect(() => {
+     api.get("/profile").then(({data})=>{
+      if(data.firstName) setUsername(`${data.firstName} ${data.lastName ||" "}`.trim())
+     })
+  }, []);
+  const role=user?.role;
   const navlinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
     role === "ADMIN"
@@ -26,13 +34,12 @@ const Sidebar = () => {
     { name: "Settings", href: "/settings", icon: SettingsIcon },
   ];
 
-  useEffect(() => {
-    setUsername(dummyProfileData.firstName + " " + dummyProfileData.lastName);
-  }, []);
+
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+ 
 
   const SidebarContent = (
     <div className="flex flex-col h-full p-3   gap-6 ">
@@ -57,7 +64,7 @@ const Sidebar = () => {
    
       <div className="flex gap-3 items-center bg-amber-600/40 rounded-xl px-3 py-2.5">
         <span className="bg-amber-400 rounded-lg w-10 h-10 flex items-center justify-center font-semibold text-white shrink-0">
-          {dummyProfileData.firstName.charAt(0).toUpperCase()}
+          {username?.charAt(0).toUpperCase()}
         </span>
         <div className="flex flex-col min-w-0">
           <p className="text-sm font-medium truncate">{username}</p>
@@ -72,7 +79,7 @@ const Sidebar = () => {
 
     
       <nav className="flex flex-col gap-1">
-        {navlinks.map((link, index) => {
+        {loading?(<div className="px-3 py-3 flex items-center gap-2 text-slate-900"><Loader2 className="animate-spin w-4 h-4 " /><span className="text-sm">Loading</span></div>):(navlinks.map((link, index) => {
           const isActive = pathname.startsWith(link.href);
           return (
             <Link
@@ -95,12 +102,13 @@ const Sidebar = () => {
               {isActive && <ChevronRightIcon size={16} />}
             </Link>
           );
-        })}
+        }))}
+       
       </nav>
 
       
       <button
-        onClick={logout}
+        onClick={logouthandle}
         className="flex items-center gap-3 mt-auto px-3 py-2.5 rounded-lg text-amber-100 hover:bg-white/10 hover:text-white transition-all duration-150 w-full text-sm"
       >
         <LogOutIcon size={18} />

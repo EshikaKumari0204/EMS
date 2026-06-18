@@ -26,7 +26,8 @@ export const updateProfile=async(req,res)=>{
    if(emp.isDeleted){
    return res.status(403).json({error:"Employee is deleted so profile cant be updated"})
   }
-  const updatedemp=await Employee.findByIdAndUpdate(session.userId,{bio:bio})
+  const updatedemp=await Employee.findByIdAndUpdate(emp._id,{bio:bio})
+ 
   return res.json({success:true})
    } catch (error) {
      console.log("error while updating profile",error)

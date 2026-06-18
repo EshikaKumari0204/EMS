@@ -1,5 +1,5 @@
 
-
+import {toast} from "react-hot-toast"
 import { dummyAttendanceData } from "../assets/assets";
 import { useState, useEffect, useCallback } from "react";
 import Loading from "../Components/Loading";
@@ -7,6 +7,7 @@ import Checkin from "../Components/attendance/Checkin";
 import Attendancestats from "../Components/attendance/Attendancestats";
 import AttendanceHistory from "../Components/attendance/AttendanceHistory";
 import { AlertCircleIcon } from "lucide-react";
+import api from "../api/axios";
 
 const Attendance = () => {
   const [history, setHistory] = useState([]);
@@ -14,8 +15,18 @@ const Attendance = () => {
   const [isDeleted, setIsDeleted] = useState(false);
 
   const fetchData = useCallback(async () => {
-    setHistory(dummyAttendanceData);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const res=await api.get("/attendance")
+      const json=res.data
+      setHistory(json.data || [])
+      if(json?.employee?.isDeleted) setIsDeleted(true)
+      
+    } catch (error) {
+         toast.error(error.response?.data?.error||error.message)
+    }
+    finally{
+      setLoading(false)
+    }
   }, []);
 
   useEffect(() => {
@@ -52,7 +63,7 @@ const Attendance = () => {
           </p>
         </div>
       ) : (
-        <Checkin todayRecord={todayRecord} onAction={fetchData} />
+        <Checkin todayrecord={todayRecord} onAction={fetchData} />
       )}
 
       <Attendancestats history={history} />

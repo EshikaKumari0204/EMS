@@ -6,6 +6,7 @@ import { Payslip } from "../models/PayslipSchema.js";
 export const getDashboard=async(req,res)=>{
   try {
   const session=req.session;
+
   if(session.role==="ADMIN"){
     const [totalEmployees,todayAttendance,pendingLeaves]=await Promise.all(
       [

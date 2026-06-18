@@ -1,33 +1,46 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext,useCallback} from "react";
 import { dummyLeaveData } from "../assets/assets";
 import { PlusIcon, ThermometerIcon, PalmtreeIcon, UmbrellaIcon, XIcon } from "lucide-react";
 import LeaveHistory from "../Components/Leave/leaveHistory";
 import LeaveForm from "../Components/Leave/LeaveForm";
 import Loading from "../Components/Loading";
-
+import { AuthContext } from "../context/Authcontext";
+import api from "../api/axios";
+import {toast} from "react-hot-toast"
 const Leave = () => {
   const [leaves, setLeaves] = useState([]);
   const [showmodal, setShowmodal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isdeleted, setIsdeleted] = useState(false);
-  const isAdmin = false;
+  const{user}=useContext(AuthContext)
+  const isAdmin =user?.role==="ADMIN" ;
 
-  const fetchLeaves = async () => {
-    setLeaves(dummyLeaveData);
-  };
+  const fetchLeaves = useCallback(async () => {
+    try {
+
+    const res=await api.get("/leaves")
+    setLeaves(res.data.data || [])
+    if(res.data.employee?.isDeleted) setIsdeleted(true)
+     } catch (error) {
+       toast.error(error.response?.data?.error||error.message)
+    }
+    finally{  
+      setLoading(false)
+    }
+  },[])
 
   useEffect(() => {
     setLoading(true);
     fetchLeaves();
-    setTimeout(() => setLoading(false), 1000);
+   
   }, []);
+ 
 
   const approvedleaves = leaves.filter((data) => data.status === "APPROVED");
   const sickCount = approvedleaves.filter((data) => data.type === "SICK").length;
   const annualCount = approvedleaves.filter((data) => data.type === "ANNUAL").length;
   const casualCount = approvedleaves.filter((data) => data.type === "CASUAL").length;
-
   const cards = [
     { label: "Sick Leave", value: sickCount, icon: ThermometerIcon },
     { label: "Casual Leave", value: casualCount, icon: UmbrellaIcon },

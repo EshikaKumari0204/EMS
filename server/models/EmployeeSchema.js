@@ -12,7 +12,8 @@ const empSchema=new mongoose.Schema({
    deductions:{type:Number,required:true},
    employmentStatus:{type:String,enum:["ACTIVE","INACTIVE"],default:"ACTIVE"},
    department:{type:String,enum:DEPARTMENTS},
-   isDeleted:{type:Boolean,default:false}
+   isDeleted:{type:Boolean,default:false},
+   bio:{type:String},
 
 },{timestamps:true})
 export const Employee=mongoose.models.Employee||mongoose.model("Employee",empSchema)

@@ -1,54 +1,29 @@
-// import {Lock} from "lucide-react"
-// import {useState,useEffect} from 'react'
-// import { dummyProfileData} from "../assets/assets"
-// import ProfileForm from "../Components/Settings/ProfileForm"
-// import ChangePass from "../Components/Settings/ChangePass"
-// import Loading from "../Components/Loading"
-// const Settings = () => {
-//   const [profile,setProfile]=useState(null)
-//   const [loading,setloading]=useState(true)
-//   const [showmodal,setShowModal]=useState(false)
-//   const fetchprofile=async()=>{
-//     setProfile(dummyProfileData)
-//     setTimeout(()=>{setloading(false)},1000)
-//   }
-//   useEffect(()=>{
-//     fetchprofile()
-    
-//   },[])
-//   if(loading) return <Loading/>
- 
-//   if(profile)
-//   return (
-// <div>
-//  <div> <h1>Setting</h1>  <h2>Manage Your account and preferences </h2></div>
-//       {profile && <ProfileForm initialdata={profile} onSuccess={fetchprofile}/>} 
-//     <div class="flex gap-4 items-center border rounded-lg max-w-lg justify-between p-2 " >
-//       <div class="flex items-center gap-4"> <Lock/>
-//        <div><h1> Password</h1> <h2>Update  Password</h2></div></div>
-//        <button class="border-slate-400 border px-2 py-2 rounded-md " onClick={()=>setShowModal(true)} >Change</button>
-//     </div>
-//     {showmodal && <ChangePass open={showmodal} onClose={()=>setShowModal(false)}/>}
-//     </div>
-//   )
-// }
 
-// export default Settings
 import { Lock } from "lucide-react";
-import { useState, useEffect } from "react";
-import { dummyProfileData } from "../assets/assets";
+import { useState, useEffect,useContext } from "react";
+
 import ProfileForm from "../Components/Settings/ProfileForm";
 import ChangePass from "../Components/Settings/ChangePass";
 import Loading from "../Components/Loading";
-
+import { AuthContext } from "../context/Authcontext";
+import api from "../api/axios";
+import {toast} from "react-hot-toast"
 const Settings = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-
+  const {user}=useContext(AuthContext)
   const fetchProfile = async () => {
-    setProfile(dummyProfileData);
-    setTimeout(() => setLoading(false), 1000);
+  try {
+    const res=await api.get("/profile")
+    const profile=res.data
+    if(profile) setProfile(profile)
+  } catch (error) {
+     toast.error(error.response?.data?.error||error.message)
+  }
+  finally{
+setLoading(false)
+  }
   };
 
   useEffect(() => {
@@ -71,7 +46,7 @@ const Settings = () => {
         </p>
       </div>
 
-      {/* Profile Form Card */}
+      {/* Profile Form Card */}{user.role!=="ADMIN"  &&
       <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
         <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
           <div className="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center">
@@ -84,7 +59,7 @@ const Settings = () => {
         <div className="px-6 py-5">
           <ProfileForm initialdata={profile} onSuccess={fetchProfile} />
         </div>
-      </div>
+      </div>}
 
       {/* Password Card */}
       <div className="bg-white border border-slate-100 rounded-2xl shadow-sm px-5 py-4 flex items-center justify-between gap-4">

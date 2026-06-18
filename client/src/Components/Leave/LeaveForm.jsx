@@ -1,7 +1,8 @@
 
 import { useState } from "react";
 import { FileText, CalendarDays, Loader2, Send } from "lucide-react";
-
+import api from "../../api/axios";
+import {toast} from "react-hot-toast"
 const inputClass = "w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition";
 
 const LeaveForm = ({ onClose, onSuccess ,open}) => {
@@ -15,10 +16,15 @@ const LeaveForm = ({ onClose, onSuccess ,open}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onClose();
-    }, 1000);
+    const formData=new FormData(e.currentTarget)
+    const data=Object.fromEntries(formData.entries())
+    try {
+      await api.post("/leaves",data)
+      onSuccess()
+      onClose()
+    } catch (error) {
+         toast.error(error.response?.data?.error||error.message)
+    }
   };
   if(!open) return null;
 
