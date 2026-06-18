@@ -37,7 +37,7 @@ const LeaveForm = ({ onClose, onSuccess ,open}) => {
           <FileText size={15} className="text-slate-400" />
           Leave Type
         </label>
-        <select name="type" required className={inputClass}>
+        <select name="type" required className={inputClass} required>
           <option value="SICK">Sick Leave</option>
           <option value="CASUAL">Casual Leave</option>
           <option value="ANNUAL">Annual Leave</option>
@@ -58,7 +58,7 @@ const LeaveForm = ({ onClose, onSuccess ,open}) => {
               name="startDate"
               required
               min={minDate}
-              className={inputClass}
+              className={inputClass} required
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -68,7 +68,7 @@ const LeaveForm = ({ onClose, onSuccess ,open}) => {
               name="endDate"
               required
               min={minDate}
-              className={inputClass}
+              className={inputClass} required
             />
           </div>
         </div>
@@ -82,7 +82,7 @@ const LeaveForm = ({ onClose, onSuccess ,open}) => {
           required
           rows={3}
           placeholder="Briefly describe why you need this leave..."
-          className={`${inputClass} resize-none`}
+          className={`${inputClass} resize-none`}required
         />
       </div>
 

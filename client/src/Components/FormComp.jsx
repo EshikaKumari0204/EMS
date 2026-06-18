@@ -55,22 +55,22 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="firstName">First Name</label>
-            <input id="firstName" type="text" placeholder="John"  name="firstName" className={inputClass}  defaultValue={initialData?.firstName}/>
+            <input id="firstName" type="text" placeholder="John"  name="firstName" className={inputClass}  defaultValue={initialData?.firstName} required/>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="lastName">Last Name</label>
-            <input id="lastName" type="text" placeholder="Doe" name="lastName" className={inputClass} defaultValue={initialData?.lastName} />
+            <input id="lastName" type="text" placeholder="Doe" name="lastName" className={inputClass} defaultValue={initialData?.lastName} required/>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="phone">Phone Number</label>
-            <input id="phone" type="tel" name="phone" placeholder="+1 234 567 8900" className={inputClass} defaultValue={initialData?. phone}/>
+            <input id="phone" type="tel" name="phone" placeholder="+1 234 567 8900" className={inputClass} defaultValue={initialData?. phone} required/>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="joinDate">Join Date</label>
-            <input id="joinDate" name="joinDate" type="date" className={inputClass}  />
+            <input id="joinDate" name="joinDate" type="date" className={inputClass}  required/>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="department">Department</label>
-            <select id="department" className={selectClass} name="department">
+            <select id="department" className={selectClass} name="department" required>
               
               {DEPARTMENTS.map((dept) => (
                 <option key={dept} value={dept}>{dept}</option>
@@ -112,7 +112,7 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="basicSalary">Basic Salary</label>
-            <input id="basicSalary" type="number" min="0" step="0.01" placeholder="0.00" name="basicSalary" className={inputClass} defaultValue={initialData?. basicSalary} />
+            <input id="basicSalary" type="number" min="0" step="0.01" placeholder="0.00" name="basicSalary" className={inputClass} defaultValue={initialData?. basicSalary} required/>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="allowances">Allowances</label>
@@ -123,7 +123,7 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {isEdit && (<div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="status">Status</label>
-            <select id="status" name="status" className={selectClass}>
+            <select id="status" name="status" className={selectClass} required>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
@@ -144,7 +144,7 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
 
         <div className="flex flex-col gap-1.5">
           <label className={labelClass} htmlFor="email">Work Email</label>
-          <input id="email" type="email" name="email" placeholder="john.doe@company.com" className={inputClass} defaultValue={initialData?.email} />
+          <input id="email" type="email" name="email" placeholder="john.doe@company.com" className={inputClass} defaultValue={initialData?.email} required/>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -152,17 +152,17 @@ const FormComp = ({initialData,onSuccess,onCancel }) => {
             <label className={labelClass} htmlFor="password">
              Temporary Password
             </label>
-            <input id="changePass"  name="password" type="password" placeholder="••••••••" className={inputClass} />
+            <input id="changePass"  name="password" type="password" placeholder="••••••••" className={inputClass} required/>
           </div>)} 
           {isEdit && ( <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="password">
             Change Password(Optional)
             </label>
-            <input id="changePass" type="password" name="password" placeholder="••••••••" className={inputClass} />
+            <input id="changePass" type="password" name="password" placeholder="••••••••" className={inputClass} required/>
           </div>)} 
           <div className="flex flex-col gap-1.5">
             <label className={labelClass} htmlFor="role">System Role</label>
-            <select  name="role" id="role" className={selectClass}>
+            <select  name="role" id="role" className={selectClass} required>
               <option value="EMPLOYEE">Employee</option>
               <option value="ADMIN">Admin</option>
             </select>
