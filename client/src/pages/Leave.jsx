@@ -2,7 +2,7 @@
 import { useState, useEffect ,useContext,useCallback} from "react";
 import { dummyLeaveData } from "../assets/assets";
 import { PlusIcon, ThermometerIcon, PalmtreeIcon, UmbrellaIcon, XIcon } from "lucide-react";
-import LeaveHistory from "../Components/Leave/leaveHistory";
+import LeaveHistory from "../Components/Leave/LeaveHistory";
 import LeaveForm from "../Components/Leave/LeaveForm";
 import Loading from "../Components/Loading";
 import { AuthContext } from "../context/Authcontext";
