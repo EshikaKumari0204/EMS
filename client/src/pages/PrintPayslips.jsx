@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { dummyPayslipData } from "../assets/assets";
+
 import Loading from "../Components/Loading";
 import { format } from "date-fns";
 import { PrinterIcon, BuildingIcon } from "lucide-react";
