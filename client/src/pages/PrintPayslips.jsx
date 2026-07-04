@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { PrinterIcon, BuildingIcon } from "lucide-react";
 import api from "../api/axios";
 
+
 const PrintPayslips = () => {
   const [payslip, setPayslip] = useState(null);
   const [loading, setLoading] = useState(true);
