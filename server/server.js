@@ -15,7 +15,10 @@ import PayslipRouter from "./Routes/PayslipRoutes.js";
 
 const app=express()
 const port=process.env.PORT||4000
-app.use(cors())  
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+})); 
 app.use(express.json())
 app.use(multer().none())
 app.get("/",(req,res)=>res.send("hey"))
